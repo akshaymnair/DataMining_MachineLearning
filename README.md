@@ -1,6 +1,6 @@
 # Phase3
 
-Python version 3.5
+Python version 2.7
 
 ```bash
 cd Code/
