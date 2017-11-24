@@ -74,3 +74,39 @@ def write_output(input_movie_ids, output_movie_ids, filename):
 	output_movies = get_movie_name(mlmovies, output_movie_ids)
 	print_output(input_movies, output_movies)
 	write_output_file(input_movies, output_movies, filename)
+
+################## HELPER FUNCTION TO PROCESS AND RETRIEVE ######################
+
+def get_movie_tf_idf_matrix():
+	mltags = read_mltags()
+
+	movie_count = mltags.loc[:,'movieid'].unique().shape[0]
+
+	# Needed for TF denominators. Calcuate total number of tags per movie
+	tags_per_movie = mltags.groupby('movieid', as_index=False)['tagid'].agg({'m_count' : pd.Series.count})
+
+	# Needed for IDF denonminators. Calculate unique movieids for each tag
+	movies_per_tag = mltags.groupby('tagid', as_index=False)['movieid'].agg({'t_count' : pd.Series.nunique})
+
+	# Grouped so as to create unique tagid, movieid pairs and calculate term frequency from timestamp
+	tagid_movieid_grouped = mltags.groupby(['tagid', 'movieid'], as_index=False)['timestamp'].agg({'tf': 'sum'})
+
+	# Merge tag_counts. Add new column including calculated tags_per_movie.
+	M1 = pd.merge(tagid_movieid_grouped, tags_per_movie, on=['movieid','movieid'], how='inner')
+
+	# Merge movie_counts. Add new column including calculated movies_per_tag.
+	M2 = pd.merge(M1, movies_per_tag, on=['tagid', 'tagid'], how = 'inner')
+
+	# Perform TF-IDF from the data.
+	M2['tfidf'] = M2['tf']*log(movie_count/M2['t_count'])/M2['m_count']
+	#print M2
+
+	# Pivot the matrix to get in required form 
+	R = M2.pivot(index='movieid', columns='tagid', values='tfidf').fillna(0)
+	#print(R)
+	return R
+
+	# Pivot the matrix to get in required form 
+	R = M.pivot(index='movieid', columns='tagid', values='tfidf').fillna(0)
+	#print (R)
+	return R
