@@ -1,3 +1,6 @@
 .DS_Store
 *.pyc
 py3.5/*
+py2.7/*
+phase3_dataset
+Code/task1/movie_final.h5
