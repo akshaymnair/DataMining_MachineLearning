@@ -64,6 +64,8 @@ for row in df_mactors.iterrows():
 
 df_mactors = df_mactors.pivot(index = 'movieid', columns = 'actorid', values = 'actor_movie_rank').fillna(0)
 
+movie_year = df_movies.set_index('movieid')
+max_year = movie_year.year.max()
 # Given a movie id return the normalized tfidf values for all tags
 def check_tag(mid):
 	return df_tf_idf.loc[mid].tolist()
@@ -90,9 +92,9 @@ def check_actor(mid):
 
 
 
-cols = [i for i in xrange(len(tags)+len(users)+len(genres)+len(actors))]
+cols = [i for i in xrange(len(tags)+len(users)+len(genres)+len(actors) + 1)]
 
-table = np.empty(shape=(len(movies),len(tags)+len(users)+len(genres)+len(actors)))
+table = np.empty(shape=(len(movies),len(tags)+len(users)+len(genres)+len(actors)+ 1))
 i = 0
 print table
 for movie_id in movies:
@@ -101,8 +103,9 @@ for movie_id in movies:
 	genre_values = check_genre(movie_id)
 	user_values = check_user(movie_id)
 	actor_values = check_actor(movie_id)
+	year = movie_year.loc[movie_id]['year']/ float(max_year)
 	#print [tag_values + user_values + genre_values + actor_values]
-	table[i] = tag_values + user_values + genre_values + actor_values
+	table[i] = tag_values + user_values + genre_values + actor_values + [year]
 	print movie_id
 	i += 1
 
