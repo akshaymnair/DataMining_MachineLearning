@@ -9,10 +9,10 @@ def save_obj(obj, filename):
 
 
 df_tf_idf = util.get_movie_tf_idf_matrix()
-df_movies = pd.read_csv('../../Dataset/mlmovies.csv')
-df_tags = pd.read_csv('../../Dataset/genome-tags.csv')
-df_users = pd.read_csv('../../Dataset/mlusers.csv')
-df_actors = pd.read_csv('../../Dataset/imdb-actor-info.csv')
+df_movies = pd.read_csv('../../phase3_dataset/mlmovies.csv')
+df_tags = pd.read_csv('../../phase3_dataset/genome-tags.csv')
+df_users = pd.read_csv('../../phase3_dataset/mlusers.csv')
+df_actors = pd.read_csv('../../phase3_dataset/imdb-actor-info.csv')
 
 # List of movies, tags, users, actors
 movies = df_movies.movieid.unique().tolist()
@@ -34,8 +34,8 @@ genre_dict = dict()
 tags_dict = dict()
 actor_ranking = dict()
 max_actor_rank = dict() 
-df_mlratings = pd.read_csv('../../Dataset/mlratings.csv')
-df_mltags = pd.read_csv('../../Dataset/mltags.csv')
+df_mlratings = pd.read_csv('../../phase3_dataset/mlratings.csv')
+df_mltags = pd.read_csv('../../phase3_dataset/mltags.csv')
 
 df_tf_idf.divide(df_tf_idf.max(axis=1), axis =0)
 	
@@ -50,7 +50,7 @@ user_rating = df_mlratings.pivot(index ='movieid', columns = 'userid', values = 
 user_rating = user_rating.divide(5.0, axis = 0)
 
 
-df_mactors = pd.read_csv('../../Dataset/movie-actor.csv')
+df_mactors = pd.read_csv('../../phase3_dataset/movie-actor.csv')
 
 for row in df_mactors.iterrows():
 	
@@ -64,6 +64,8 @@ for row in df_mactors.iterrows():
 
 df_mactors = df_mactors.pivot(index = 'movieid', columns = 'actorid', values = 'actor_movie_rank').fillna(0)
 
+movie_year = df_movies.set_index('movieid')
+max_year = movie_year.year.max()
 # Given a movie id return the normalized tfidf values for all tags
 def check_tag(mid):
 	return df_tf_idf.loc[mid].tolist()
@@ -90,9 +92,9 @@ def check_actor(mid):
 
 
 
-cols = [i for i in xrange(len(tags)+len(users)+len(genres)+len(actors))]
+cols = [i for i in xrange(len(tags)+len(users)+len(genres)+len(actors) + 1)]
 
-table = np.empty(shape=(len(movies),len(tags)+len(users)+len(genres)+len(actors)))
+table = np.empty(shape=(len(movies),len(tags)+len(users)+len(genres)+len(actors)+ 1))
 i = 0
 print table
 for movie_id in movies:
@@ -101,8 +103,9 @@ for movie_id in movies:
 	genre_values = check_genre(movie_id)
 	user_values = check_user(movie_id)
 	actor_values = check_actor(movie_id)
+	year = movie_year.loc[movie_id]['year']/ float(max_year)
 	#print [tag_values + user_values + genre_values + actor_values]
-	table[i] = tag_values + user_values + genre_values + actor_values
+	table[i] = tag_values + user_values + genre_values + actor_values + [year]
 	print movie_id
 	i += 1
 
