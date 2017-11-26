@@ -3,6 +3,8 @@ import sys
 import util
 import os
 import cPickle
+from multiprocessing.dummy import Pool as ThreadPool
+from functools import partial
 
 
 def main():
@@ -19,28 +21,38 @@ def main():
 	movie_genre.columns = ['genres','movieid']
 	genres = movie_genre.genres.unique().tolist()
 
-	movie_year_matrix = []
 	# merge the actor and movie details
 	actor_movie_grouped = pd.merge(movie_actor, mlmovies, on=['movieid','movieid'], how='inner')
 	# merge genre with the actor and movie details
 	actor_movie_genre_grouped = pd.merge(actor_movie_grouped, movie_genre, on=['movieid','movieid'], how='inner')
-	actor_movie_year_tensor = []
-	count=0
-	# creating the tensor
-	for actor in actor_list:
-		movie_year_matrix = []
-		for movie in movies_list:
-			movie_year_list = []
-			for genre in genres:
-				if actor_movie_genre_grouped[(actor_movie_genre_grouped.actorid == actor) & 
-				(actor_movie_genre_grouped.movieid == movie) & (genre == actor_movie_genre_grouped.genres_y)].empty:
-					movie_year_list.append(0.0)
-				else:
-					movie_year_list.append(1.0)
-			movie_year_matrix.append(movie_year_list)
-		actor_movie_year_tensor.append(movie_year_matrix)
-	# store the tensor in a pickle file
-	cPickle.dump( actor_movie_year_tensor, open( "actor_movie_genre_tensor.pkl", "wb" ) )
+	actor_movie_genre_grouped.sort_values(['actorid', 'movieid'], ascending=[1, 1])
+	actor_movie_genre_tensor = [None] * len(actor_list)
+	
+	actor_dict = {}
+	for i in range(0,len(actor_list)):
+		actor_dict[actor_list[i]] = i
+	movie_dict = {}
+	for i in range(0,len(movies_list)):
+		movie_dict[movies_list[i]] = i
+	genre_dict = {}
+	for i in range(0,len(genres)):
+		genre_dict[genres[i]] = i
+
+	actor_movie_genre_tensor = [None] * len(actor_list)
+	for i in range(0,len(actor_list)):
+		actor_movie_genre_tensor[i] = [None] * len(movies_list)
+		for  j in range(0,len(movies_list)):
+			actor_movie_genre_tensor[i][j] = [None] * len(genres)
+			for k in range(0,len(genres)):
+				actor_movie_genre_tensor[i][j][k] = 0.0
+
+	for index, row in actor_movie_genre_grouped.iterrows():
+		a_id=row['actorid']
+		m_id=row['movieid']
+		g_id=row['genres_y']
+		actor_movie_genre_tensor[actor_dict[a_id]][movie_dict[m_id]][genre_dict[g_id]]  = 1.0
+
+	cPickle.dump( actor_movie_genre_tensor, open( "actor_movie_genre_tensor.pkl", "wb" ) )
 
 if __name__ == "__main__":
     main()
