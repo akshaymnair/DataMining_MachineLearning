@@ -1,0 +1,11 @@
+For input movies: 
+                                Movie id	     Movie name	
+                                    3467	          U-571	
+                                    9443	    Ultraviolet	
+Output movies: 
+                                Movie id	     Movie name	
+                                    4057	       Hannibal	
+                                    5217	Murder by Numbers	
+                                    7235	        Spartan	
+                                    9432	When a Stranger Calls	
+                                   10157	    Untraceable	

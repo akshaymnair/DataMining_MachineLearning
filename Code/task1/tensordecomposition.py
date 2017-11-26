@@ -8,7 +8,7 @@ import numpy as np
 from tensorly.decomposition import parafac
 from scipy.spatial.distance import cosine
 
-output_file = 'task1d_cpd.out.txt'
+output_file = 'task1c_cpd.out.txt'
 no_of_components = 4
 output_folder = os.path.join(os.path.dirname(__file__), "..", "..", "Output")
 order_factor = 0.05
