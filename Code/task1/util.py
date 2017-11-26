@@ -48,6 +48,12 @@ def parse_input(args):
 		input_movie_ids.append(int(args[i]))
 	return False, input_movie_ids
 
+def is_feedback_relevant():
+	ufb = raw_input('Is movie relevant to you? (Type N/n for no): ')
+	if ufb.lower() == 'n' or ufb.lower() == 'no':
+		return False
+	return True
+
 def print_output(input_movies, output_movies):
 	print('For input movies: ')
 	print('%40s\t%15s\t' %('Movie id', 'Movie name'))
@@ -58,7 +64,17 @@ def print_output(input_movies, output_movies):
 	for movie in output_movies:
 		print ('%40s\t%15s\t' %(movie[0], movie[1]))
 
-def write_output_file(input_movies, output_movies, filename):
+def get_relevance_feedback(output_movies):
+	feedback = {}
+	print('Provide feedback on recommendation?')
+	print('Output movies: ')
+	print('%40s\t%15s\t' %('Movie id', 'Movie name'))
+	for movie in output_movies:
+		print ('%40s\t%15s\t' %(movie[0], movie[1]))
+		feedback[movie[0]] = is_feedback_relevant()
+	return feedback
+
+def write_output_file(input_movies, output_movies, revised_movies, filename):
 	f = open(os.path.abspath(os.path.join(output_folder, filename)),'w')
 	f.write('For input movies: ' + '\n')
 	f.write('%40s\t%15s\t\n' %('Movie id', 'Movie name'))
@@ -68,13 +84,25 @@ def write_output_file(input_movies, output_movies, filename):
 	f.write('%40s\t%15s\t\n' %('Movie id', 'Movie name'))
 	for movie in output_movies:
 		f.write('%40s\t%15s\t\n' %(movie[0], movie[1]))
+	f.write('Revised movies: \n')
+	f.write('%40s\t%15s\t\n' %('Movie id', 'Movie name'))
+	for movie in output_movies:
+		f.write('%40s\t%15s\t\n' %(movie[0], movie[1]))
 
-def write_output(input_movie_ids, output_movie_ids, filename):
+def process_output(input_movie_ids, output_movie_ids, filename):
 	mlmovies = read_mlmovies()
 	input_movies = get_movie_name(mlmovies, input_movie_ids)
 	output_movies = get_movie_name(mlmovies, output_movie_ids)
 	print_output(input_movies, output_movies)
-	write_output_file(input_movies, output_movies, filename)
+	feedback = get_relevance_feedback(output_movies)
+	
+	# Do something with feedback. get revised_movies. Comment below line
+	
+	revised_movies = output_movies
+	
+	#print revised movies
+	
+	write_output_file(input_movies, output_movies, revised_movies, filename)
 
 ################## HELPER FUNCTION TO PROCESS AND RETRIEVE ######################
 

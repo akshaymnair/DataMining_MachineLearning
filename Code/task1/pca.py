@@ -39,7 +39,7 @@ def main():
 	output_movie_ids = [t[0] for t in other_movies][:5]
 
 	#print output and log them
-	util.write_output(input_movie_ids, output_movie_ids, output_file)
+	util.process_output(input_movie_ids, output_movie_ids, output_file)
 
 if __name__ == "__main__":
     main()

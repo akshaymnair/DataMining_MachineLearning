@@ -20,7 +20,7 @@ def main():
 	output_movie_ids = input_movie_ids 
 
 	#print output and log them
-	util.write_output(input_movie_ids, output_movie_ids, output_file)
+	util.process_output(input_movie_ids, output_movie_ids, output_file)
 
 if __name__ == "__main__":
     main()
