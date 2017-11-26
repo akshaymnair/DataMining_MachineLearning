@@ -3,12 +3,13 @@ import pandas as pd
 from numpy import log
 import os
 
-db_folder_path = os.path.join(os.path.dirname(__file__), "..", "..", "Dataset")
+db_folder_path = os.path.join(os.path.dirname(__file__), "..", "..", "phase3_dataset")
 output_folder = os.path.join(os.path.dirname(__file__), "..", "..", "Output")
 
 mltags_file = 'mltags.csv'
 mlmovies_file = 'mlmovies.csv'
 genome_tags_file = 'genome-tags.csv'
+hd5_file = 'movie_final.h5'
 
 
 ############### HELPER FUNCTION TO READ FILES #################################
@@ -44,7 +45,7 @@ def parse_input(args):
 		return True, None
 	input_movie_ids = []
 	for i in range(1, len(args)):
-		input_movie_ids.append(args[i])
+		input_movie_ids.append(int(args[i]))
 	return False, input_movie_ids
 
 def print_output(input_movies, output_movies):
@@ -76,6 +77,10 @@ def write_output(input_movie_ids, output_movie_ids, filename):
 	write_output_file(input_movies, output_movies, filename)
 
 ################## HELPER FUNCTION TO PROCESS AND RETRIEVE ######################
+
+def get_movie_matrix_from_hd5():
+	store = pd.HDFStore(hd5_file)
+	return store['df']
 
 def get_movie_tf_idf_matrix():
 	mltags = read_mltags()

@@ -1,14 +1,13 @@
 For input movies: 
                                 Movie id	     Movie name	
-                                    3189	       Scream 3	
-                                    3216	    Pitch Black	
-                                    3233	    Wonder Boys	
-                                    3323	Erin Brockovich	
-                                    3324	Final Destination	
+                                       1	      Toy Story	
+                                       2	        Jumanji	
+                                       3	Grumpier Old Men	
+                                       4	Waiting to Exhale	
 Output movies: 
                                 Movie id	     Movie name	
-                                    3189	       Scream 3	
-                                    3216	    Pitch Black	
-                                    3233	    Wonder Boys	
-                                    3323	Erin Brockovich	
-                                    3324	Final Destination	
+                                     550	      Tombstone	
+                                     583	        Aladdin	
+                                     587	         Batman	
+                                     592	   Pretty Woman	
+                                     622	    Primal Fear	
