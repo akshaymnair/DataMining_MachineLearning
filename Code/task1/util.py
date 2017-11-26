@@ -10,6 +10,8 @@ mltags_file = 'mltags.csv'
 mlmovies_file = 'mlmovies.csv'
 genome_tags_file = 'genome-tags.csv'
 hd5_file = 'movie_final.h5'
+imdb_actor_info_file = 'imdb-actor-info.csv'
+movie_actor_file = 'movie-actor.csv'
 
 
 ############### HELPER FUNCTION TO READ FILES #################################
@@ -31,6 +33,13 @@ def read_mlmovies():
 def read_genome_tags():
 	return pd.read_csv(os.path.abspath(os.path.join(db_folder_path, genome_tags_file)))
 
+# import imdb-actor-info
+def read_imdb_actor_info():
+	return pd.read_csv(os.path.abspath(os.path.join(db_folder_path, imdb_actor_info_file)))
+
+# import movie-actor
+def read_movie_actor():
+	return pd.read_csv(os.path.abspath(os.path.join(db_folder_path, movie_actor_file)))
 
 #To implement
 def get_matrix(movie_list):
