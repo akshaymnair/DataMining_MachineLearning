@@ -8,7 +8,7 @@ import numpy as np
 from tensorly.decomposition import parafac
 from scipy.spatial.distance import cosine
 
-output_file = 'task1c_cpd.out.txt'
+output_file = 'task1c_task2_cpd.out.txt'
 no_of_components = 4
 output_folder = os.path.join(os.path.dirname(__file__), "..", "..", "Output")
 order_factor = 0.05
@@ -24,6 +24,7 @@ def main():
 	decomposed = parafac(actor_movie_year_array, no_of_components, init='random')
 
 	mlmovies = util.read_mlmovies()
+	mlmovies = mlmovies.loc[mlmovies['year'] >= util.movie_year_for_tensor]
 	movies_list = mlmovies.movieid.unique()
 
 	# data frame for movie factor matrix from cp decomposition
@@ -45,7 +46,27 @@ def main():
 	output_movie_ids = [t[0] for t in other_movies][:5]
 
 	#print output and log them
-	util.process_output(input_movie_ids, output_movie_ids, output_file)
+	feedback = util.process_output(input_movie_ids, output_movie_ids, output_file)
+
+	#process feedback to get relevant movies and movies to be excluded
+	relevant_movies, movie_to_exclude = util.process_feedback(feedback, input_movie_ids)
+
+	relevant_movie_count = len(relevant_movies)
+	#if all recommended movies are relevant then return
+	if relevant_movie_count==5:
+		print "\nAll the movies were relevant hence no modification to the suggestion"
+		return
+
+	#fetch data frames for relevant and feedback movies
+	relevant_movies_df = decomposed_movies_df.loc[relevant_movies]
+	feedback_movies_df = decomposed_movies_df.loc[feedback.keys()]
+
+	modified_query = util.probabilistic_feedback_query(feedback_movies_df, relevant_movies_df, movies_list, relevant_movie_count)
+
+	revised_movie_ids = util.get_revised_movies(decomposed_movies_df, modified_query, movie_to_exclude)
+
+	util.print_revised(revised_movie_ids, output_file)
+
 
 if __name__ == "__main__":
     main()
