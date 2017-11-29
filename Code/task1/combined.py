@@ -3,8 +3,15 @@ import sys
 import util
 import os
 import cPickle
+import pickle
+
 import numpy as np
+from scipy import sparse
 from tensorly.decomposition import parafac
+from sklearn.decomposition import LatentDirichletAllocation as LDA
+from scipy.spatial.distance import cosine
+from sklearn.decomposition import TruncatedSVD as SVD
+from sklearn.metrics.pairwise import cosine_similarity
 
 output_file = 'task1e_combined.out.txt'
 no_of_components = 4
@@ -101,6 +108,9 @@ def do_page_rank(input_movie_ids):
 				pr_new[i] = (0.85*norm_simil[i].dot(pr.loc['PageRank'])) + (1/(i+1))
 		pr = pr_new.copy()
 
+	output_movies = pd.Series(pr.loc['PageRank'], index=pr.columns.values).to_dict()
+	return output_movies
+
 def main():
 	err, input_movie_ids = util.parse_input(sys.argv)
 	if err:
@@ -108,16 +118,26 @@ def main():
 
 	matrix = util.get_movie_matrix_from_hd5()
 
-	svd_list = do_svd(matrix, input_movie_ids)
-	lda_list = do_lda(matrix, input_movie_ids)
-	tensor_list = do_tensor(input_movie_ids)
-	page_rank_list = do_page_rank(input_movie_ids)
-	
-	# Remove this line pass the output here
-	output_movie_ids = input_movie_ids 
+	svd_dict = do_svd(matrix, input_movie_ids)
+	print('SVD done')
+	lda_dict = do_lda(matrix, input_movie_ids)
+	print('LDA done')
+	tensor_dict = do_tensor(input_movie_ids)
+	print('PageRank done')
+	page_rank_dict = do_page_rank(input_movie_ids)
+	print('Tensor done')
 
-	#print output and log them
-	util.process_output(input_movie_ids, output_movie_ids, output_file)
+	other_movies = []
+	for k in svd_dict:
+		if k in input_movie_ids:
+			continue
+		total_weight = svd_dict[k] + lda_dict.get(k, 0) + tensor_dict.get(k, 0) + page_rank_dict(k, 0)
+		other_movies.append((k, total_weight))
+
+	other_movies.sort(key=lambda tup: tup[1], reverse=True)
+	output_movie_ids = [t[0] for t in other_movies][:5]
+
+	feedback = util.process_output(input_movie_ids, output_movie_ids, output_file)
 
 if __name__ == "__main__":
     main()
