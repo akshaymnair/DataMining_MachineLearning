@@ -77,7 +77,7 @@ def do_lda(matrix, input_movie_ids):
 		output_movies[index] = cosine_sum
 	return output_movies
 
-def do_page_rank(input_movie_ids):
+def do_page_rank(seed_movies):
 	movie_matrix_svd = pd.read_pickle('movie_matrix_svd.pkl')
 
 	#import movies
@@ -117,16 +117,16 @@ def main():
 	if err:
 		return
 
-	matrix = util.get_movie_matrix_from_hd5()
+	#matrix = util.get_movie_matrix_from_hd5()
 
-	svd_dict = do_svd(matrix, input_movie_ids)
+	#svd_dict = do_svd(matrix, input_movie_ids)
 	print('SVD done')
-	lda_dict = do_lda(matrix, input_movie_ids)
+	#lda_dict = do_lda(matrix, input_movie_ids)
 	print('LDA done')
-	tensor_dict = do_tensor(input_movie_ids)
-	print('PageRank done')
+	#tensor_dict = do_tensor(input_movie_ids)
+	print('tensor done')
 	page_rank_dict = do_page_rank(input_movie_ids)
-	print('Tensor done')
+	print('page rank done')
 
 	other_movies = []
 	for k in svd_dict:
