@@ -15,6 +15,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 output_file = 'task1e_combined.out.txt'
 no_of_components = 4
+order_factor = 0.05
 
 def do_tensor(input_movie_ids):
 	# read the pickle file that contains tensor
@@ -64,7 +65,7 @@ def do_lda(matrix, input_movie_ids):
 	lda.fit(matrix)
 	lda_df = pd.DataFrame(lda.transform(matrix), index=matrix.index)
 
-	input_movie_df = s_df.loc[input_movie_ids]
+	input_movie_df = lda_df.loc[input_movie_ids]
 
 	output_movies = {}
 	for index, movie in lda_df.iterrows():
