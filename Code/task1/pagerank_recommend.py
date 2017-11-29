@@ -36,7 +36,7 @@ def main():
 	norm_simil = df_movie / df_movie.sum(0)
 	
 	# Pagerank algorithm
-	for j in range(0,100):
+	for j in range(0,5):
 		pr_new = pr.copy()
 		#Update page rank
 		for i in movie_ids:
@@ -60,7 +60,47 @@ def main():
 	r_movies = [ ]
 	r_movies = list(pr.loc['PageRank'].nlargest(5).index)
 
-	util.process_output(seed_movies, r_movies, O_file)
+	feedback = util.process_output(seed_movies, r_movies, O_file)
+
+	#process feedback to get relevant movies and movies to be excluded
+	relevant_movies, movie_to_exclude = util.process_feedback(feedback, seed_movies)
+	irrelevant_movies = np.setdiff1d(movie_to_exclude, seed_movies)
+
+	relevant_movie_count = len(relevant_movies)
+	#if all recommended movies are relevant then return
+	if relevant_movie_count == 5:
+		print ("All the movies were relevant hence no modification to the suggestion")
+		return
+
+	pr = pd.DataFrame(1.0, columns=movie_ids, index=('PageRank',))
+	# Pagerank algorithm
+	for j in range(0,5):
+		pr_new = pr.copy()
+		#Update page rank
+		for i in movie_ids:
+			if i in seed_movies:
+				pr_new[i] = (0.15/len(seed_movies)) + (0.85*norm_simil[i].dot(pr.loc['PageRank'])) + (0.01/(seed_movies.index(i)+1))
+			else:
+				pr_new[i] = (0.85*norm_simil[i].dot(pr.loc['PageRank'])) 
+			if i in irrelevant_movies:
+				pr_new[i] = pr_new[i] - 0.02
+			elif i in relevant_movies:
+				pr_new[i] = pr_new[i] + 0.02
+		pr = pr_new.copy()
+
+	#Remove seeded actors from list
+	for i in seed_movies:
+		try:
+			pr_final = pr.drop(i ,axis=1) 
+			pr = pr_final
+		except:
+			pass
+	#Display top 5 related actors
+	
+	r_movies = [ ]
+	r_movies = list(pr.loc['PageRank'].nlargest(5).index)
+
+	util.print_revised(r_movies, O_file)
 
 
 if __name__ == "__main__":
