@@ -5,13 +5,15 @@ Python version 2.7
 ```bash
 cd Code/
 pip install pandas scipy sklearn
+```
+
+Task 1 & 2 instruction:
 python task1/pca.py 3189 3216 3233
 python task1/svd.py 3189 3216 3233
 python task1/lda.py 3189 3216 3233
 python task1/tensordecomposition.py 3189 3216 3233
 python task1/pagerank.py 3189 3216 3233
 python task1/combined.py 3189 3216 3233
-```
 
 Task 3 Instructions
 Run python map.py
