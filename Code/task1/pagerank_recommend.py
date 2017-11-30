@@ -15,7 +15,7 @@ def main():
 	# get user input, movies watched by the user
 	seed_movies = sys.argv[1].split(',')
 	seed_movies = list(map(int, seed_movies))
-	movie_matrix_svd = pd.read_pickle('movie_matrix_svd.pkl')
+	movie_matrix_svd = pd.read_pickle('../task3/movie_matrix_svd.pkl')
 
 	#import movies
 	movie_years= []
