@@ -150,6 +150,7 @@ def parse_test_input():
 
 def classify_test_input():
     data_dict,labelinfo = parse_train_input()
+    svm = Support_Vector_Machine()
     svm.fit(data=data_dict)
     data_dict_test = parse_test_input()
     for key in data_dict_test.keys():
