@@ -69,7 +69,7 @@ def main():
 	relevant_movie_count = len(relevant_movies)
 	#if all recommended movies are relevant then return
 	if relevant_movie_count == 5:
-		print ("All the movies were relevant hence no modification to the suggestion")
+		print ("\nAll the movies were relevant hence no modification to the suggestion")
 		return
 
 	pr = pd.DataFrame(1.0, columns=movie_ids, index=('PageRank',))

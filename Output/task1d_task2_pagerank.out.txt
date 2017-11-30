@@ -1,0 +1,21 @@
+For input movies: 
+                                Movie id	     Movie name	
+                                       4	Waiting to Exhale	
+                                       5	Father of the Bride Part II	
+                                    5555	Claire of the Moon	
+                                    6006	   Moonlighting	
+                                    8779	Charlie and the Chocolate Factory	
+Output movies: 
+                                Movie id	     Movie name	
+                                      46	How to Make an American Quilt	
+                                      74	   Bed of Roses	
+                                     217	Boys on the Side	
+                                     275	Miracle on 34th Street	
+                                     378	When a Man Loves a Woman	
+Revised movies: 
+                                Movie id	     Movie name	
+                                     217	Boys on the Side	
+                                     220	Circle of Friends	
+                                     275	Miracle on 34th Street	
+                                     287	       Only You	
+                                     378	When a Man Loves a Woman	
