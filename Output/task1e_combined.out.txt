@@ -1,14 +1,21 @@
 For input movies: 
                                 Movie id	     Movie name	
-                                    3189	       Scream 3	
-                                    3216	    Pitch Black	
-                                    3233	    Wonder Boys	
-                                    3323	Erin Brockovich	
-                                    3324	Final Destination	
+                                    7056	Chasing Liberty	
+                                    8779	Charlie and the Chocolate Factory	
+                                    8843	 Racing Stripes	
+                                   10015	Stephanie Daley	
+                                   10601	  Transporter 3	
 Output movies: 
                                 Movie id	     Movie name	
-                                    3189	       Scream 3	
-                                    3216	    Pitch Black	
-                                    3233	    Wonder Boys	
-                                    3323	Erin Brockovich	
-                                    3324	Final Destination	
+                                    7308	Connie and Carla	
+                                    8744	Flight of the Phoenix	
+                                    9211	        Valiant	
+                                    9380	Rumor Has It...	
+                                    9426	Imagine Me & You	
+Revised movies: 
+                                Movie id	     Movie name	
+                                    8082	   Garden State	
+                                    9180	       Serenity	
+                                    9506	Mission: Impossible III	
+                                    9521	           Cars	
+                                   10242	      99 francs	

@@ -1,0 +1,21 @@
+For input movies: 
+                                Movie id	     Movie name	
+                                    7056	Chasing Liberty	
+                                    8779	Charlie and the Chocolate Factory	
+                                    8843	 Racing Stripes	
+                                   10015	Stephanie Daley	
+                                   10601	  Transporter 3	
+Output movies: 
+                                Movie id	     Movie name	
+                                    7212	Starsky & Hutch	
+                                    7261	Home on the Range	
+                                    9525	 On a Clear Day	
+                                    9633	     SherryBaby	
+                                    9753	 Stomp the Yard	
+Revised movies: 
+                                Movie id	     Movie name	
+                                    7207	Dirty Dancing: Havana Nights	
+                                    9748	Letters from Iwo Jima	
+                                    9824	 Starter for 10	
+                                   10098	   Om Shanti Om	
+                                   10112	       Redacted	

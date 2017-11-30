@@ -166,6 +166,7 @@ def get_movie_tf_idf_matrix():
 	return R
 
 def process_feedback(feedback, input_movie_ids):
+	movie_to_exclude = input_movie_ids
 	# Do something with feedback. get revised_movies.
 	relevant_movies = []
 	irrelevant_movies = []
@@ -174,8 +175,8 @@ def process_feedback(feedback, input_movie_ids):
 			relevant_movies.append(movie_id)
 		else:
 			# to remove irrelevant movies from recommendation, add the irrelevant movie to the list
-			input_movie_ids.append(movie_id)
-	return relevant_movies, input_movie_ids
+			movie_to_exclude.append(movie_id)
+	return relevant_movies, movie_to_exclude
 
 def probabilistic_feedback_query(feedback_movies_df, relevant_movies_df, movies_list, relevant_movie_count):
 	# probabilistic feedback query calculation
@@ -189,13 +190,27 @@ def probabilistic_feedback_query(feedback_movies_df, relevant_movies_df, movies_
 	modified_query = modified_query.fillna(value=0)
 	return modified_query
 
-def get_revised_movies(decomposed_movies_df, modified_query, input_movie_ids):
+def get_revised_movies(movies_df, modified_query, input_movie_ids):
 	# finding cosine similarity of modified query with the input movie vector and fetching the top 5 values
 	revised_movies = []
-	for index, movie in decomposed_movies_df.iterrows():
+	for index, movie in movies_df.iterrows():
 		cosine_similarity = (1 - cosine(movie, modified_query))
 		revised_movies.append((index, cosine_similarity))
 	other_movies = list(filter(lambda tup: tup[0] not in input_movie_ids, revised_movies))
+	other_movies.sort(key=lambda tup: tup[1], reverse=True)
+	revised_movie_ids = [t[0] for t in other_movies][:5]
+	return revised_movie_ids
+
+def get_similarity(movies_df, modified_query):
+	# finding cosine similarity of modified query with the input movie vector and fetching the top 5 values
+	movie_similarity_list = {}
+	for index, movie in movies_df.iterrows():
+		cosine_similarity = (1 - cosine(movie, modified_query))
+		movie_similarity_list[index] = cosine_similarity
+	return movie_similarity_list
+
+def get_revised_movies_combined(combined_similarity, input_movie_ids):
+	other_movies = list(filter(lambda tup: tup[0] not in input_movie_ids, combined_similarity))
 	other_movies.sort(key=lambda tup: tup[1], reverse=True)
 	revised_movie_ids = [t[0] for t in other_movies][:5]
 	return revised_movie_ids
