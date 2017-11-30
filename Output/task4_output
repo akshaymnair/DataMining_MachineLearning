@@ -1,0 +1,57 @@
+python lsh.py 5 1 12,3111
+Layers
+5
+Hashes
+1
+Movies
+[12, 3111]
+Enter movie id to query:- 12
+Enter range of query:- 1
+Number of unique movies considered :- 2
+Total no of movies considered :- 8
+3111    0.009326
+Name: CosineValues, dtype: float64
+Give Feedback as String of 1(Good),0(Nuetral),-1(Bad) :- 1
+3111    0.011866
+Name: CosineValues, dtype: float64
+Give Feedback as String of 1(Good),0(Nuetral),-1(Bad) :- 0
+3111    0.011866
+Name: CosineValues, dtype: float64
+Give Feedback as String of 1(Good),0(Nuetral),-1(Bad) :- -1
+3111    0.009326
+Name: CosineValues, dtype: float64
+Give Feedback as String of 1(Good),0(Nuetral),-1(Bad) :-
+
+
+python lsh.py 5 10
+Layers
+5
+Hashes
+10
+Movies
+[]
+Enter movie id to query:- 3111
+Enter range of query:- 5
+Number of unique movies considered :- 1956
+Total no of movies considered :- 4108
+7375     0.931008
+10159    0.910800
+9425     0.895251
+8154     0.893175
+7818     0.891565
+Name: CosineValues, dtype: float64
+Give Feedback as String of 1(Good),0(Nuetral),-1(Bad) :- 1,0,0,-1,0
+7375     0.896667
+10159    0.873122
+9425     0.864861
+8154     0.861710
+6388     0.860601
+Name: CosineValues, dtype: float64
+Give Feedback as String of 1(Good),0(Nuetral),-1(Bad) :- 1,0,0,0,1
+7375    0.780824
+40      0.773518
+9425    0.765464
+6388    0.758363
+5056    0.754868
+Name: CosineValues, dtype: float64
+Give Feedback as String of 1(Good),0(Nuetral),-1(Bad) :-
