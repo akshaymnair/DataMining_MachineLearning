@@ -1,17 +1,10 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Nov 29 07:07:56 2017
-
-@author: supra
-"""
-
 import csv
 import pickle
 import pandas as pd
 import sys
-import matplotlib.pyplot as plt
-from matplotlib import style
 import numpy as np
+
+classify_test_input()
 
 class Support_Vector_Machine:
     # train
@@ -71,7 +64,7 @@ class Support_Vector_Machine:
                 
                 if w[0] < 0:
                     optimized = True
-                    print('Optimized a step.')
+                    #print('Optimized a step.')
                 else:
                     w = w - step
                     
@@ -86,14 +79,12 @@ class Support_Vector_Machine:
         for i in self.data:
             for xi in self.data[i]:
                 yi=i
-                print(xi,':',yi*(np.dot(self.w,xi)+self.b))  
+                #print(xi,':',yi*(np.dot(self.w,xi)+self.b))  
     
     
     def predict(self,features):
         # sign( x.w+b )
-        classification = np.sign(np.dot(np.array(features),self.w)+self.b)
-        if classification !=0 and self.visualization:
-            self.ax.scatter(features[0], features[1], s=200, marker='*', c=self.colors[classification])
+        classification = np.sign(np.dot(np.array(features),self.w)+self.b)         
         return classification   
     
 
@@ -104,6 +95,10 @@ def load_obj(file):
 
 
 def parse_train_input():
+    data_dict = {}
+    labelinfo = {}
+    data_dict2 = {}
+    labelinfo2 = {}
     df = load_obj('movie_matrix_svd.pkl')
     #print(df)
     with open ('Training-data.csv') as data:
@@ -111,6 +106,11 @@ def parse_train_input():
       for row in reader:
           movieId = int(row[0])
           label = row[1]
+          labelint = 0;
+          for char in label:
+              labelint += ord(char)
+          if labelint not in labelinfo.keys():
+              labelinfo[labelint] = label
           #print(label)
           #print(movieId)
           for index, row in df.iterrows():
@@ -119,16 +119,41 @@ def parse_train_input():
                   feature2 = float(row[1])
                   #print(feature1,feature2)
                   if label in data_dict.keys():
-                      data_dict[label].append((feature1,feature2))
+                      data_dict[labelint].append((feature1,feature2))
                   else:
-                      data_dict[label] = [(feature1,feature2)]
-    print(data_dict)
-                
-    
-svm = Support_Vector_Machine()
-svm.fit(data = data_dict)
+                      data_dict[labelint] = [(feature1,feature2)]
+    #print(data_dict)
+    k = -1
+    for lkey in labelinfo.keys():
+        labelinfo2[k] = labelinfo[lkey]
+        k += 2
+    k = -1
+    for dkey in data_dict.keys():
+        data_dict2[k] = data_dict[dkey]
+        k += 2
+    return (data_dict2,labelinfo2)
 
-predict_us = [[5.78, 2.3587],[0.4587,5.2548],[47.5489,38.25484][19.2548,23.2548]]
+def parse_test_input():
+    data_dict_test = {}
+    df = load_obj('movie_matrix_svd.pkl')
+    #print(df)
+    with open ('Test-data.csv') as data:
+      reader = csv.reader(data)  
+      for row in reader:
+          movieId = int(row[0])
+          for index, row in df.iterrows():
+              if(index == movieId):
+                  feature1 = float(row[0])
+                  feature2 = float(row[1])
+                  #print(feature1,feature2)
+                  data_dict_test[movieId] = [(feature1,feature2)]
+    #print(data_dict_test)
+    return data_dict_test
 
-for p in predict_us:
-    svm.predict(p)
+def classify_test_input():
+    data_dict,labelinfo = parse_train_input()
+    svm.fit(data=data_dict)
+    data_dict_test = parse_test_input()
+    for key in data_dict_test.keys():
+        predclass = svm.predict(data_dict_test[key])
+        print("Movie ID ",key," was classified as ",labelinfo[int(predclass)])           
