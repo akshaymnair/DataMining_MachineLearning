@@ -100,7 +100,7 @@ def main():
 		top_movie_list = list(cosine_movie.loc['CosineValues'].nlargest(query_r).index)
 		feedback = list(map(int,(raw_input("Give Feedback as String of 1(Good),0(Nuetral),-1(Bad) :- ").split(','))))
 		for key,i in enumerate(feedback):
-			query_vec = query_vec + i *c* movie_df.loc[movie_list[key]]
+			query_vec = query_vec + i *(1.0/(feedback.count(i)+1))* movie_df.loc[movie_list[key]]
 		for i in movie_list:
 			cosine_movie[i] = np.dot(query_vec,movie_df.loc[i]) / (norm(query_vec)*norm(movie_df.loc[i]))
 		
