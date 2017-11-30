@@ -4,8 +4,6 @@ import pandas as pd
 import sys
 import numpy as np
 
-classify_test_input()
-
 class Support_Vector_Machine:
     # train
     def fit(self, data):
@@ -156,4 +154,8 @@ def classify_test_input():
     data_dict_test = parse_test_input()
     for key in data_dict_test.keys():
         predclass = svm.predict(data_dict_test[key])
-        print("Movie ID ",key," was classified as ",labelinfo[int(predclass)])           
+        print("Movie ID ",key," was classified as ",labelinfo[int(predclass)])      
+        
+        
+        
+classify_test_input()
